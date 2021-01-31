@@ -5,28 +5,42 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class Main {
-    static private Organizer resetFolders(Organizer folders) {
+    static private FolderOrganizer resetFolders(FolderOrganizer folders) {
         folders.resetFolders();
         return folders;
     }
 
-    static private Organizer createFolderOrganizer() {
+    static private FolderOrganizer createFolderOrganizer() {
         Path dataPath = Paths.get("data").toAbsolutePath();
-        return new Organizer(dataPath, "files", "zips", "title.ratings", "title.ratings.tsv.gz");
+        System.out.println(dataPath);
+
+        return new FolderOrganizer(dataPath, "files", "zips");
     }
 
-    static private void downloadAndUnzipFile(Organizer folders) {
+    static private void downloadAndUnzipFile(FileOrganizer files) {
 
-        FileProducer producer = new FileProducer(folders, "https://datasets.imdbws.com/title.ratings.tsv.gz");
+        FileProducer producer = new FileProducer(files);
         producer.download();
         producer.decompressGzip();
     }
+    static private void manipulateFiles(FileOrganizer files){
+        FileManipulator manipulator = new FileManipulator(files);
+        manipulator.convertTsvToCsv();
+    }
 
     public static void main(String[] args) {
-        Organizer folders = createFolderOrganizer();
+        FolderOrganizer folders = createFolderOrganizer();
 //        resetFolders(folders);
-//        downloadAndUnzipFile(folders);
-        FileManipulator manipulator = new FileManipulator(folders);
-        manipulator.readFile();
+        FileOrganizer basicFiles = new FileOrganizer(folders, "title.basics.tsv", "title.basics.csv" ,"title.basics.tsv.gz", "https://datasets.imdbws.com/title.basics.tsv.gz" );
+        FileOrganizer ratingsFiles = new FileOrganizer(folders, "ratings.basics.tsv", "ratings.basics.csv" ,"ratings.basics.tsv.gz", "https://datasets.imdbws.com/title.ratings.tsv.gz" );
+        downloadAndUnzipFile(basicFiles);
+        downloadAndUnzipFile(ratingsFiles);
+//        manipulateFiles(basicFiles);
+//        manipulateFiles(ratingsFiles);
+//        Path p1 = Paths.get("test", "test2.csv").toAbsolutePath();
+//        Path p2 = Paths.get("data", "files", "test2.csv").toAbsolutePath();
+//        FileManipulator.mergeCsvs(p1.toFile(), p2.toFile(), folders.getFilePath().resolve("merged.csv").toFile());
+//        FileManipulator.mergeCsvs(ratingsFiles.getCsvFile().toFile(), basicFiles.getCsvFile().toFile(), folders.getFilePath().resolve("merged.csv").toFile());
+        FileManipulator.countLinesInFile(ratingsFiles.getCsvFile().toFile());
     }
 }

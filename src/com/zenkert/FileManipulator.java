@@ -1,22 +1,33 @@
 package com.zenkert;
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class FileManipulator {
     File tsvFile;
     File csvFile;
 
-    public FileManipulator(Organizer folders) {
-//        this.tsvFile = folders.getTsvFile().toFile();
-//        this.csvFile = folders.getCsvFile().toFile();
-        this.tsvFile = new File("./data/files/test.tsv");
-        this.tsvFile = new File("./data/files/test.csv");
-        System.out.println(tsvFile);
+    public FileManipulator(FileOrganizer files) {
+        this.tsvFile = files.getTsvFile().toFile();
+        this.csvFile = files.getCsvFile().toFile();
     }
 
-    void readFile() {
+    static void countLinesInFile(File file) {
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(file);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        int i = 0;
+        while (scanner.hasNextLine()) {
+            scanner.nextLine();
+            i++;
+        }
+        System.out.println("Number of lines in " + file + " are: " + i);
+    }
+
+    void convertTsvToCsv() {
         Scanner myReader = null;
         try {
             myReader = new Scanner(tsvFile);
@@ -31,7 +42,6 @@ public class FileManipulator {
                 String csvLine = processLine(data);
                 bw.write(csvLine);
             }
-
         } catch (IOException e) {
             System.err.format("IOException: %s%n", e);
         }

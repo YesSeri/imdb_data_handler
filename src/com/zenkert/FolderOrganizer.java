@@ -6,27 +6,22 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
 
-public class Organizer {
+public class FolderOrganizer {
 
     private Path mainPath;
     private Path filePath;
     private Path zipPath;
-    private Path zipFile;
-    private Path tsvFile;
-    private Path csvFile;
 
     /**
      * @param dataPath Mainfolder that you want to be created.
      * @param filePath A string that will be created as a subfolder in dataPath folder
      * @param zipPath  A string that will be created as a subfolder in dataPath folder
      */
-    public Organizer(Path dataPath, String filePath, String zipPath, String fileName, String zipFile) {
+    public FolderOrganizer(Path dataPath, String filePath, String zipPath) {
         this.zipPath = dataPath.resolve(zipPath);
         this.filePath = dataPath.resolve(filePath);
         this.mainPath = dataPath;
-        this.zipFile = this.zipPath.resolve(zipFile);
-        this.tsvFile = this.filePath.resolve(fileName + ".tsv");
-        this.csvFile = this.filePath.resolve(fileName + ".csv");
+
     }
 
     /**
@@ -61,16 +56,16 @@ public class Organizer {
         }
     }
 
-    public Path getCsvFile() {
-        return csvFile;
+    public Path getZipPath() {
+        return zipPath;
     }
 
-    public Path getTsvFile() {
-        return tsvFile;
+    public Path getFilePath() {
+        return filePath;
     }
 
-    public Path getZipFile() {
-        return zipFile;
+    public Path getMainPath() {
+        return mainPath;
     }
 
     public String toString() {
