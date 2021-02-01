@@ -32,9 +32,9 @@ public class APIConnection {
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
 
-        Gson gson = new Gson();
-        String json = gson.fromJson(response.body());
-        System.out.println(json);
+//        Gson gson = new Gson();
+//        String json = gson.fromJson(response.body());
+//        System.out.println(json);
     }
 
     public static void main(String[] args) {

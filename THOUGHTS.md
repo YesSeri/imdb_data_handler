@@ -1,0 +1,1 @@
+I need to upload the two CSV files ratings and title to a database, as two tables, so I can make joins between them and match them on id. 

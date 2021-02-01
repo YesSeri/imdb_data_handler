@@ -12,17 +12,18 @@ public class FileOrganizer {
     private Path zipFile;
     private Path tsvFile;
     private Path csvFile;
+    private Path filteredFile;
     private URL imdbUrl;
 
     /**
-     * @param dataPath Mainfolder that you want to be created.
      *
      *
      */
-    public FileOrganizer(FolderOrganizer folders, String tsvName, String csvName, String zipFile, String imdbUrl) {
+    public FileOrganizer(FolderOrganizer folders, String tsvName, String csvName, String zipFile, String filteredFile, String imdbUrl) {
         this.zipFile = folders.getZipPath().resolve(zipFile);
         this.tsvFile = folders.getFilePath().resolve(tsvName);
         this.csvFile = folders.getFilePath().resolve(csvName);
+        this.filteredFile = folders.getFilePath().resolve(filteredFile);
         try {
             this.imdbUrl = new URL(imdbUrl);
         } catch (Exception e) {
@@ -45,6 +46,10 @@ public class FileOrganizer {
 
     public Path getZipFile() {
         return zipFile;
+    }
+
+    public Path getFilteredFile() {
+        return filteredFile;
     }
 
     public URL getImdbUrl() {

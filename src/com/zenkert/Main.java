@@ -18,29 +18,22 @@ public class Main {
     }
 
     static private void downloadAndUnzipFile(FileOrganizer files) {
-
         FileProducer producer = new FileProducer(files);
         producer.download();
         producer.decompressGzip();
     }
-    static private void manipulateFiles(FileOrganizer files){
-        FileManipulator manipulator = new FileManipulator(files);
-        manipulator.convertTsvToCsv();
+    static private void manipulateFiles(FileOrganizer files, File movieInfo){
+//        FileManipulator.convertTsvToCsv(files.getTsvFile().toFile(), files.getCsvFile().toFile());
+        FileManipulator.filterCsv(files.getCsvFile().toFile(), movieInfo, files.getFilteredFile().toFile());
     }
 
     public static void main(String[] args) {
         FolderOrganizer folders = createFolderOrganizer();
 //        resetFolders(folders);
-        FileOrganizer basicFiles = new FileOrganizer(folders, "title.basics.tsv", "title.basics.csv" ,"title.basics.tsv.gz", "https://datasets.imdbws.com/title.basics.tsv.gz" );
-        FileOrganizer ratingsFiles = new FileOrganizer(folders, "ratings.basics.tsv", "ratings.basics.csv" ,"ratings.basics.tsv.gz", "https://datasets.imdbws.com/title.ratings.tsv.gz" );
-        downloadAndUnzipFile(basicFiles);
-        downloadAndUnzipFile(ratingsFiles);
-//        manipulateFiles(basicFiles);
-//        manipulateFiles(ratingsFiles);
-//        Path p1 = Paths.get("test", "test2.csv").toAbsolutePath();
-//        Path p2 = Paths.get("data", "files", "test2.csv").toAbsolutePath();
-//        FileManipulator.mergeCsvs(p1.toFile(), p2.toFile(), folders.getFilePath().resolve("merged.csv").toFile());
-//        FileManipulator.mergeCsvs(ratingsFiles.getCsvFile().toFile(), basicFiles.getCsvFile().toFile(), folders.getFilePath().resolve("merged.csv").toFile());
-        FileManipulator.countLinesInFile(ratingsFiles.getCsvFile().toFile());
+        FileOrganizer ratingsFiles = new FileOrganizer(folders, "ratings.basics.tsv", "ratings.basics.csv" ,"ratings.basics.tsv.gz", "filtered.csv", "https://datasets.imdbws.com/title.ratings.tsv.gz" );
+        FileOrganizer basicsFiles = new FileOrganizer(folders, "title.basics.tsv.gz", "title.basics.csv" ,"title.basics.tsv.gz", "filtered.csv", "https://datasets.imdbws.com/title.basics.tsv.gz" );
+//        downloadAndUnzipFile(ratingsFiles);
+        File movieInfo = basicsFiles.getCsvFile().toFile();
+        manipulateFiles(ratingsFiles, movieInfo);
     }
 }
