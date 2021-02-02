@@ -1,8 +1,10 @@
 package com.zenkert;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 
 public class Main {
     static private FolderOrganizer resetFolders(FolderOrganizer folders) {
@@ -24,16 +26,26 @@ public class Main {
     }
     static private void manipulateFiles(FileOrganizer files, File movieInfo){
 //        FileManipulator.convertTsvToCsv(files.getTsvFile().toFile(), files.getCsvFile().toFile());
-        FileManipulator.filterCsv(files.getCsvFile().toFile(), movieInfo, files.getFilteredFile().toFile());
     }
 
     public static void main(String[] args) {
         FolderOrganizer folders = createFolderOrganizer();
 //        resetFolders(folders);
         FileOrganizer ratingsFiles = new FileOrganizer(folders, "ratings.basics.tsv", "ratings.basics.csv" ,"ratings.basics.tsv.gz", "filtered.csv", "https://datasets.imdbws.com/title.ratings.tsv.gz" );
-        FileOrganizer basicsFiles = new FileOrganizer(folders, "title.basics.tsv.gz", "title.basics.csv" ,"title.basics.tsv.gz", "filtered.csv", "https://datasets.imdbws.com/title.basics.tsv.gz" );
+        FileOrganizer titleFiles = new FileOrganizer(folders, "title.basics.tsv.gz", "title.basics.csv" ,"title.basics.tsv.gz", "filtered.csv", "https://datasets.imdbws.com/title.basics.tsv.gz" );
 //        downloadAndUnzipFile(ratingsFiles);
-        File movieInfo = basicsFiles.getCsvFile().toFile();
-        manipulateFiles(ratingsFiles, movieInfo);
+//        File movieInfo = titleFiles.getCsvFile().toFile();
+//        manipulateFiles(ratingsFiles, movieInfo);
+        DatabaseConnection dc = new DatabaseConnection(ratingsFiles.getCsvFile().toFile(), titleFiles.getCsvFile().toFile());
+        dc.resetDatabase();
+        try {
+            dc.insertRatings();
+            dc.insertTitle();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
 }

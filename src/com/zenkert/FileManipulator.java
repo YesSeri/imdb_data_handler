@@ -50,9 +50,8 @@ public class FileManipulator {
         try (FileWriter writer = new FileWriter(outputFile);
              BufferedWriter bw = new BufferedWriter(writer)) {
             myReader.nextLine();
-            int i = 0;
             while (myReader.hasNextLine()) {
-                i++;
+                System.out.println("aaa");
                 String data = myReader.nextLine();
                 String[] row = data.replace("\"", "").split(",");
                 String id = row[0];
@@ -60,9 +59,6 @@ public class FileManipulator {
                 int votes = Integer.parseInt(row[2]);
                 if (isMovie(id, movieInfo) == true && goodMovie(rating, votes) == true) {
                     bw.write(data + "\n");
-                }
-                if (i >40){
-                    break;
                 }
             }
         } catch (IOException e) {
@@ -78,17 +74,7 @@ public class FileManipulator {
     }
 
     static boolean isMovie(String id, File movieInfo) throws FileNotFoundException {
-        Scanner scanner = new Scanner(movieInfo);
-        int i = 0;
-        while (scanner.hasNextLine()) {
-            i++;
-            String data = scanner.nextLine();
-            String[] row = data.replace("\"", "").split(",");
-            if(id == row[0]){
-                System.out.println("match found");
-            }
-        }
-        return true;
+        return false;
     }
 
     static void countLinesInFile(File file) {
